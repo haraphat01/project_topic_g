@@ -1,12 +1,10 @@
 "use client"
 import { useState } from 'react';
 import Image from 'next/image'
-import Replicate from 'replicate';
+import { runModel } from './api/replicateAPI';
 import axios from 'axios';
 
-const systemPrompt = `"You are a helpful, respectful, and honest academic assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, false information, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."`
-const maxToken = 500
+
 export default function Home() {
 
   const [inputValue, setInputValue] = useState('');
@@ -14,43 +12,14 @@ export default function Home() {
   const PromptConstant = `Generate a comprehensive list of 10 project topics suitable for final-year students in the developing countries who major in ${inputValue}. Ensure that the topics align with students' interests and educational backgrounds. For each topic, provide a description and specify the primary research focus or questions that students should investigate while working on the topic.`
 
   const handleGenerate = async () => {
-    const apiUrl = 'https://api.replicate.com/v1/predictions';
-    const apiToken = process.env.REPLICATE_API_TOKEN;
-    const modelVersion = 'de18b8b68ef78f4f52c87eb7e3a0244d18b45b3c67affef2d5055ddc9c2fb678';
-
-    const requestBody = {
-      version: modelVersion,
-      input: {
-        prompt: PromptConstant,
-      },
-    };
-
     try {
-      const response = await axios.post(apiUrl, requestBody, {
-        headers: {
-          Authorization: `Token ${apiToken}`,
-        },
-      });
-
-      const predictionId = response.data.id;
-      setOutputValue(`Prediction ID: ${predictionId}`);
-
-      // Fetch the prediction status and output
-      const predictionUrl = `${apiUrl}/${predictionId}`;
-      const predictionResponse = await axios.get(predictionUrl, {
-        headers: {
-          Authorization: `Token ${apiToken}`,
-        },
-      });
-
-      const predictionStatus = predictionResponse.data.status;
-      const predictionOutput = predictionResponse.data.output;
-
-      setOutputValue(`${predictionOutput}`);
-      `console.log(Prediction Output: ${ predictionOutput });`
+      const output = await runModel(PromptConstant);
+      setOutputValue(JSON.stringify(output));
+      console.log(`Prediction Output: ${JSON.stringify(output)}`);
     } catch (error) {
       console.error(error);
     }
+
   }
   console.log(outputValue)
 
@@ -92,6 +61,7 @@ export default function Home() {
             <p>{outputValue}</p>
           </div>
         )}
+
       </div>
     </main>
   )
