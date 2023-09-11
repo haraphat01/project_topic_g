@@ -23,6 +23,9 @@ export const runModel = async (prompt: string) => {
     {
       input: {
         prompt: prompt,
+        system_prompt: systemPrompt,
+        max_new_tokens: maxToken
+
       },
     }
   );
