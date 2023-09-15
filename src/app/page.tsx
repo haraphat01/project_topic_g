@@ -1,9 +1,8 @@
 "use client"
 import { useState } from 'react';
 import Image from 'next/image'
-import { runModel } from './api/replicateAPI';
+import { runModel } from '../pages/api/replicateAPI';
 import axios from 'axios';
-
 
 export default function Home() {
 
@@ -11,17 +10,57 @@ export default function Home() {
   const [outputValue, setOutputValue] = useState('');
   const PromptConstant = `Generate a comprehensive list of 10 project topics suitable for final-year students in the developing countries who major in ${inputValue}. Ensure that the topics align with students' interests and educational backgrounds. For each topic, provide a description and specify the primary research focus or questions that students should investigate while working on the topic.`
 
-  const handleGenerate = async () => {
+  // const handleGenerate = async () => {
+  //   try {
+  //     const response = await fetch('/api/replicateAPI', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ PromptConstant }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+
+  //     const data = await response.json();
+  //     setOutputValue(data)
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+
+  // }
+
+  // }
+  const handleGenerate = async (e: any) => {
+    e.preventDefault();
+  
     try {
-      const output = await runModel(PromptConstant);
-      setOutputValue(JSON.stringify(output));
-      console.log(`Prediction Output: ${JSON.stringify(output)}`);
+      const response = await fetch('/api/openAI', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: PromptConstant })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      setOutputValue(data);
     } catch (error) {
       console.error(error);
     }
-
   }
- 
+
+  console.log(outputValue);
+
+
+
+
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <div className="max-w-2xl px-4 py-8 mx-auto">
@@ -65,3 +104,4 @@ export default function Home() {
     </main>
   )
 }
+
