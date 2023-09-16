@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react';
 import Image from 'next/image'
+import ReactMarkdown from 'react-markdown'
 import { runModel } from '../pages/api/replicateAPI';
 import axios from 'axios';
 
@@ -8,34 +9,13 @@ export default function Home() {
 
   const [inputValue, setInputValue] = useState('');
   const [outputValue, setOutputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const PromptConstant = `Generate a comprehensive list of 10 project topics suitable for final-year students in the developing countries who major in ${inputValue}. Ensure that the topics align with students' interests and educational backgrounds. For each topic, provide a description and specify the primary research focus or questions that students should investigate while working on the topic.`
+  const paragraphs = outputValue.split('\n');
 
-  // const handleGenerate = async () => {
-  //   try {
-  //     const response = await fetch('/api/replicateAPI', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ PromptConstant }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const data = await response.json();
-  //     setOutputValue(data)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-
-  // }
-
-  // }
   const handleGenerate = async (e: any) => {
     e.preventDefault();
-  
+    setIsLoading(true);
     try {
       const response = await fetch('/api/openAI', {
         method: 'POST',
@@ -44,16 +24,19 @@ export default function Home() {
         },
         body: JSON.stringify({ prompt: PromptConstant })
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const data = await response.json();
       setOutputValue(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false); // Set loading state to false after the API request is complete
     }
+    
   }
 
   console.log(outputValue);
@@ -92,13 +75,16 @@ export default function Home() {
           >
             Generate
           </button>
+          {isLoading && <p>Your topics are being generated</p>}
         </div>
-        {outputValue && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold">Generated Output:</h2>
-            <p>{outputValue}</p>
-          </div>
-        )}
+        <div className="response-container">
+          {paragraphs.map((paragraph, index) => (
+            <p key={index} className="my-4">
+              {paragraph}
+              
+            </p>
+          ))}
+        </div>
 
       </div>
     </main>
