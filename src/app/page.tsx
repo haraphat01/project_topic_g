@@ -45,16 +45,17 @@ export default function Home() {
 
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <main className="flex flex-col items-center justify-center">
       <div className="max-w-2xl px-4 py-8 mx-auto">
-        <h1 className="text-4xl font-bold text-center">Welcome to the Project Topic Generator!</h1>
+        <h1 className="text-4xl font-bold text-center">Project Topics Generator!</h1>
+        <p className="mt-4 text-lg text-center">Looking for a research title generator? Try this tool! It can make a research topic or question for your proposal, essay, or any other project. 100% free, no registration required.</p>
         <p className="mt-4 text-lg text-center">Are you a final year student looking for project topic ideas? Look no further!</p>
         <p className="mt-4 text-lg text-center">Simply tell us your area of interest or academic discipline, and we&apos;ll generate a list of well-defined project topics tailored to your preferences. </p>
-        <div className="mt-8">
-          <Image src="/project-idea.png" alt="Project Idea" width={400} height={300} />
+        <div className="mt-8  text-center">
+          <Image src="/project-idea.png" alt="Project Topics Generator - Generate Research Project Topics" width={400} height={300} />
         </div>
         <div className="mt-8">
-          <h2 className="text-2xl font-bold">How it works:</h2>
+          <h1 className="text-2xl font-bold">How it works:</h1>
           <ul className="mt-4 list-disc list-inside">
             <li>Enter your area of study or interest</li>
             <li>Click the &quot;Generate&quot; button</li>
