@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
-import { runModel } from '../pages/api/replicateAPI';
 import axios from 'axios';
 
 export default function Home() {
@@ -39,10 +38,6 @@ export default function Home() {
     
   }
 
-  console.log(outputValue);
-
-
-
 
   return (
     <main className="flex flex-col items-center justify-center">
@@ -52,7 +47,7 @@ export default function Home() {
         <p className="mt-4 text-lg text-center">Are you a final year student looking for project topic ideas? Look no further!</p>
         <p className="mt-4 text-lg text-center">Simply tell us your area of interest or academic discipline, and we&apos;ll generate a list of well-defined project topics tailored to your preferences. </p>
         <div className="mt-8  text-center">
-          <Image src="/project-idea.png" alt="Project Topics Generator - Generate Research Project Topics" width={400} height={300} />
+          <Image src="/project-idea.png" alt="Project Topics Generator - Generate Research Project Topics" width={400} height={300} loading="lazy" />
         </div>
         <div className="mt-8">
           <h1 className="text-2xl font-bold">How it works:</h1>
